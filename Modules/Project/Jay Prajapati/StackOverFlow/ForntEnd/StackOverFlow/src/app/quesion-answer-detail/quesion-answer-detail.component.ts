@@ -14,7 +14,8 @@ export class QuesionAnswerDetailComponent implements OnInit {
 
   userId: any;
   queId: any;
-  queAnsDetails: any = {};
+  queAnsDetails: any = {answers:[]};
+  
   constructor(private fb: FormBuilder,
     private questions: QuestionsService,
     private route: ActivatedRoute,
@@ -35,7 +36,10 @@ export class QuesionAnswerDetailComponent implements OnInit {
 
     console.log(this.queId + 'Question');
     this.questions.getQuestion(this.queId).subscribe(
-      res => { this.queAnsDetails = res; console.log(res) },
+      res => { 
+        this.queAnsDetails = res; 
+        //console.log(res)
+       },
       err => console.log(err)
     )
   }
@@ -49,9 +53,18 @@ export class QuesionAnswerDetailComponent implements OnInit {
       this.router.navigate(['/login']);
     } else {
       this.userService.postAnswer(this.userId, this.queId, this.answerForm.value).subscribe(
-        res => {
-          location.reload();
-          console.log(res)
+        (res: any) => {
+          //console.log(res);
+          if(res.status == "Success"){
+            alert(res.message)
+            location.reload();
+
+          }else{
+            console.log(res);
+          }
+          
+          //console.log(res)
+
         },
         err => {
           if (err instanceof HttpErrorResponse) {

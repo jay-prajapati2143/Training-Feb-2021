@@ -12,7 +12,10 @@ import { UsersService } from 'src/app/users.service';
 export class EditProfileAndSettingsComponent implements OnInit {
 
   currentUserId: any;
-  user: any;
+  user : any = { 
+    reputation : 0,
+    answers:[],
+    questions:[]}
   profileForm: FormGroup;
   constructor(private userService: UsersService, private fb: FormBuilder, private route: Router) {
     this.profileForm = this.fb.group({
@@ -29,6 +32,7 @@ export class EditProfileAndSettingsComponent implements OnInit {
     this.currentUserId = localStorage.getItem('userId');
     this.userService.getCurrentUser().subscribe(
       (res: any) => {
+        console.log(res);
         this.user = res;
         this.profileForm.setValue({
           FullName: res.fullName,

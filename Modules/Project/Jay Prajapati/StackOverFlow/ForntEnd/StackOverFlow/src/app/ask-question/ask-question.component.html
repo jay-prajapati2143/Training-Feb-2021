@@ -51,11 +51,11 @@
                                 </div>
 
                             </div>
-                            <button class="btn-dark my-2" (click)="AddList()">Add New Relation <i class="fa fa-plus"
+                            <button class="btn-dark my-2" (click)="AddList()">Add Tag <i class="fa fa-plus"
                                     aria-hidden="true"></i></button>
                         </div>
                         <div>
-                            <button class="btn btn-primary" (click)="submit()">Post your question</button>
+                            <button class="btn btn-primary" [disabled]="questionForm.invalid" (click)="submit()">Post your question</button>
                         </div>
                     </form>
                 </div>

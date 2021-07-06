@@ -10,7 +10,10 @@ import { UsersService } from '../users.service';
 export class UserDetailsComponent implements OnInit {
 
   userId : any;
-  user : any;
+  user : any = { 
+    reputation : 0,
+    answers:[],
+    questions:[]};
   constructor(private route : ActivatedRoute,
     private userService : UsersService) { }
 
@@ -18,7 +21,7 @@ export class UserDetailsComponent implements OnInit {
     this.userId = parseInt(this.route.snapshot.paramMap.get('userId')!);
     this.userService.getUserById(this.userId).subscribe(
       res=>{
-        console.log(res);
+        //console.log(res);
         this.user = res;
       }
     )

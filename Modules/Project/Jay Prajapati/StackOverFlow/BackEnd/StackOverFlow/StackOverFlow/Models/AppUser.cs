@@ -1,6 +1,8 @@
-﻿using StackOverFlow.Models.Authentication;
+﻿using Microsoft.AspNetCore.Http;
+using StackOverFlow.Models.Authentication;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -26,18 +28,24 @@ namespace StackOverFlow.Models
         }
 
         public int UserId { get; set; }
+        [Required]
         public string FullName { get; set; }
         public string Title { get; set; }
-        public int? VisitedDays { get; set; }
-        public int? Reputation { get; set; } // New column Added
+        [Required]
+        public int VisitedDays { get; set; }
+        [Required]
+        public int Reputation { get; set; } // New column Added
         public string GitHub { get; set; }
         public string Twitter { get; set; }
         public string Location { get; set; }
         public DateTime? LastSeen { get; set; }
-        public int? ProfileViews { get; set; }
+        [Required]
+        public int ProfileViews { get; set; }
         public string AboutUser { get; set; }
+        [Required]
         public string ApplicationUserId { get; set; }
         public ApplicationUser applicationUser { get; set; }
+
 
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<BadgesEarnedByUser> BadgesEarnedByUsers { get; set; }

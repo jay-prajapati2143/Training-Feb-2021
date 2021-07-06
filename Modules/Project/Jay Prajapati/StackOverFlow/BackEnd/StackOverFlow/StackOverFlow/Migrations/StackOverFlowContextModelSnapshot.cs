@@ -163,15 +163,15 @@ namespace StackOverFlow.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Answer");
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("int")
                         .HasColumnName("QuestionID");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
-                    b.Property<int?>("Vote")
+                    b.Property<int>("Vote")
                         .HasColumnType("int");
 
                     b.HasKey("AnswerId");
@@ -196,6 +196,7 @@ namespace StackOverFlow.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
@@ -214,10 +215,10 @@ namespace StackOverFlow.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ProfileViews")
+                    b.Property<int>("ProfileViews")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Reputation")
+                    b.Property<int>("Reputation")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -228,7 +229,7 @@ namespace StackOverFlow.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("VisitedDays")
+                    b.Property<int>("VisitedDays")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
@@ -320,6 +321,7 @@ namespace StackOverFlow.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("BadgeName")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
@@ -340,14 +342,14 @@ namespace StackOverFlow.Migrations
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BadgeId")
+                    b.Property<int>("BadgeId")
                         .HasColumnType("int")
                         .HasColumnName("BadgeID");
 
-                    b.Property<DateTime?>("DateOfEarned")
+                    b.Property<DateTime>("DateOfEarned")
                         .HasColumnType("date");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -368,11 +370,11 @@ namespace StackOverFlow.Migrations
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("int")
                         .HasColumnName("QuestionID");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -394,10 +396,11 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CompanyToExclude")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -434,7 +437,7 @@ namespace StackOverFlow.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -454,10 +457,11 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("IndustryToExclude")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -501,7 +505,7 @@ namespace StackOverFlow.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -521,6 +525,7 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Question1")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
                         .HasColumnName("Question");
@@ -528,17 +533,17 @@ namespace StackOverFlow.Migrations
                     b.Property<string>("QuestionBody")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("TimeOfAsk")
+                    b.Property<DateTime>("TimeOfAsk")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("TotalViews")
+                    b.Property<int>("TotalViews")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
-                    b.Property<int?>("Vote")
+                    b.Property<int>("Vote")
                         .HasColumnType("int");
 
                     b.HasKey("QuestionId");
@@ -556,11 +561,12 @@ namespace StackOverFlow.Migrations
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("int")
                         .HasColumnName("QuestionID");
 
                     b.Property<string>("TagName")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
@@ -580,10 +586,11 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("TechPeferNotToWorkWith")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -603,10 +610,11 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("TechYouWantToWorkWith")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -626,10 +634,11 @@ namespace StackOverFlow.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Technology")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -643,10 +652,11 @@ namespace StackOverFlow.Migrations
             modelBuilder.Entity("StackOverFlow.Models.TechnologiesUsedByUserInJob", b =>
                 {
                     b.Property<string>("Technologies")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("UserID");
 
@@ -866,12 +876,16 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.Question", "Question")
                         .WithMany("Answers")
                         .HasForeignKey("QuestionId")
-                        .HasConstraintName("FK__Answers__Questio__65370702");
+                        .HasConstraintName("FK__Answers__Questio__65370702")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("Answers")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDAnswers");
+                        .HasConstraintName("Fk_UserIDAnswers")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
 
@@ -882,7 +896,9 @@ namespace StackOverFlow.Migrations
                 {
                     b.HasOne("StackOverFlow.Models.Authentication.ApplicationUser", "applicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("applicationUser");
                 });
@@ -892,12 +908,16 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.Badge", "Badge")
                         .WithMany("BadgesEarnedByUsers")
                         .HasForeignKey("BadgeId")
-                        .HasConstraintName("Fk_BadgeIDBadge");
+                        .HasConstraintName("Fk_BadgeIDBadge")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("BadgesEarnedByUsers")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDBadge");
+                        .HasConstraintName("Fk_UserIDBadge")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Badge");
 
@@ -909,12 +929,16 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.Question", "Question")
                         .WithMany("Bookmarks")
                         .HasForeignKey("QuestionId")
-                        .HasConstraintName("FK__Bookmarks__Quest__5F7E2DAC");
+                        .HasConstraintName("FK__Bookmarks__Quest__5F7E2DAC")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("Bookmarks")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__Bookmarks__UserI__5E8A0973");
+                        .HasConstraintName("FK__Bookmarks__UserI__5E8A0973")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
 
@@ -926,7 +950,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("CompaniesToExcludes")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__Companies__UserI__7755B73D");
+                        .HasConstraintName("FK__Companies__UserI__7755B73D")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -936,7 +962,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("Educations")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDEducation");
+                        .HasConstraintName("Fk_UserIDEducation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -946,7 +974,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("IndustriesToExcludes")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__Industrie__UserI__6BE40491");
+                        .HasConstraintName("FK__Industrie__UserI__6BE40491")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -956,7 +986,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("JobProfiles")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__JobProfil__UserI__690797E6");
+                        .HasConstraintName("FK__JobProfil__UserI__690797E6")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -966,7 +998,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("Questions")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDQuestion");
+                        .HasConstraintName("Fk_UserIDQuestion")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -976,7 +1010,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.Question", "Question")
                         .WithMany("Tags")
                         .HasForeignKey("QuestionId")
-                        .HasConstraintName("FK__Tags__QuestionID__625A9A57");
+                        .HasConstraintName("FK__Tags__QuestionID__625A9A57")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -986,7 +1022,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("TechPreferNotToWorkWiths")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__TechPrefe__UserI__6EC0713C");
+                        .HasConstraintName("FK__TechPrefe__UserI__6EC0713C")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -996,7 +1034,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("TechWantToWorkWiths")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("FK__TechWantT__UserI__719CDDE7");
+                        .HasConstraintName("FK__TechWantT__UserI__719CDDE7")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1006,7 +1046,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany("TechnologiesUsedAsStudents")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDTech");
+                        .HasConstraintName("Fk_UserIDTech")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -1016,7 +1058,9 @@ namespace StackOverFlow.Migrations
                     b.HasOne("StackOverFlow.Models.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Fk_UserIDTechInJob");
+                        .HasConstraintName("Fk_UserIDTechInJob")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

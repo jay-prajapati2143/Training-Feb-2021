@@ -55,7 +55,10 @@
                 <div *ngIf="answer.invalid &&
                 answer.touched">
                 <small *ngIf="answer.errors?.required" class="text-danger">
-                    QuestionBody is required
+                    Answer is required
+                </small>
+                <small *ngIf="answer.errors?.minlength" class="text-danger">
+                    Minimum 8 characters should in Answer.
                 </small>
 
             </div>
@@ -66,7 +69,7 @@
             </form>
         </div>
         <div class="card-footer">
-            Browse other questions or <a routerLink="/ask-question">ask your own question.</a>
+            Browse other questions or <a routerLink="/ask-question" style="text-decoration: none;">ask your own question.</a>
         </div>
     </div>
 </div>

@@ -12,6 +12,9 @@ import { PasswordStrengthValidator } from '../Validation/password-strength.valid
 })
 export class LoginComponent implements OnInit {
 
+  hide1 : boolean = true;
+  hide2 : boolean = true;
+  hide3 : boolean = true;
   public currentUserToken : any;
   public error : any;
   @Output() public childEvent = new EventEmitter();
@@ -24,6 +27,7 @@ export class LoginComponent implements OnInit {
     Password : ['',[Validators.required,PasswordStrengthValidator]]
   });
   ngOnInit(): void {
+    
   }
 
   get userName(){
@@ -38,18 +42,20 @@ export class LoginComponent implements OnInit {
     this._auth.loginUser(this.loginForm.value)
       .subscribe(
         (res: any) => {
-             
-       if(res.token != undefined){
+             debugger;
+       if(res.status == "Success"){
+         debugger;
             localStorage.setItem('token', res.token);
             localStorage.setItem('userId',res.user);
-            alert("Login Successfully done");
+            alert(res.message);
             //console.log(res);
             //this.currentUserToken = res;
             //console.log(res.message);
             //console.log(res.token);
             this.route.navigate(['']);
        } else{
-        alert("username or password incorrect!");
+         alert(res.message);
+        
        }
          
 
@@ -69,9 +75,9 @@ export class LoginComponent implements OnInit {
 
 
         },
-        // (err : any) => {
-        //   alert(err.message);
-        // }
+        (err : any) => {
+          alert(err.message);
+        }
       );
 
       
@@ -81,9 +87,18 @@ export class LoginComponent implements OnInit {
     //   alert(this.error);
     // }
   }
-
+ 
   registerUser(){
     this.route.navigate(['register']);
+  }
+
+  CurrentPasswordToggle(){
+    if(this.hide1){
+      this.hide1 = false;
+    }else
+    {
+      this.hide1 = true;
+    }
   }
 
 }

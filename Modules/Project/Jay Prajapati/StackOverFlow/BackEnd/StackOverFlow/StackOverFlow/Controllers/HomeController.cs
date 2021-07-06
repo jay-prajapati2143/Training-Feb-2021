@@ -59,6 +59,7 @@ namespace StackOverFlow.Controllers
             user.ProfileViews += 1;
             _unitOfWork.AppUsers.UpdateUser(user.UserId,user);
             _unitOfWork.Complete();
+            _unitOfWork.Dispose();
             return Ok(user);
         }
 
@@ -69,6 +70,8 @@ namespace StackOverFlow.Controllers
             var users = _unitOfWork.AppUsers.SearchUser(user);
             return Ok(users);
         }
+
+        
 
         //Questions
 
@@ -108,6 +111,7 @@ namespace StackOverFlow.Controllers
             _unitOfWork.Complete();
             Que.Answers = _unitOfWork.Answer.GetByQueId(queId).ToList();
             Que.Tags = _unitOfWork.Tag.getByQueId(queId);
+            _unitOfWork.Dispose();
             return Ok(Que);
         }
 

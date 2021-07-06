@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using StackOverFlow.Code.Services;
+using StackOverFlow.Code.Services.Email;
 using StackOverFlow.Models;
 using StackOverFlow.Models.Authentication;
 using StackOverFlow.UnitOfWorkPattern;
@@ -13,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace StackOverFlow.Controllers
 {
@@ -25,14 +28,26 @@ namespace StackOverFlow.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
+        private readonly IMailService _mailService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUnitOfWork unitOfWork) 
+        public AuthenticateController(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IConfiguration configuration,
+            SignInManager<ApplicationUser> signInManager,
+            IUnitOfWork unitOfWork,
+            IEmailSender emailSender,
+            IMailService mailService) 
 
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
+            _signInManager = signInManager;
+            _mailService = mailService;
         }
 
         [HttpPost]
@@ -42,6 +57,39 @@ namespace StackOverFlow.Controllers
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+                if (!result.Succeeded)
+                {
+                    // For Email Verification
+                    var userFromDb = await userManager.FindByNameAsync(user.UserName);
+
+                    var emailtoken = await userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+
+                    var uriBuilder = new UriBuilder(_configuration["ReturnPaths:ConfirmEmail"]);
+                    var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+                    query["token"] = emailtoken;
+                    query["userid"] = userFromDb.Id;
+                    uriBuilder.Query = query.ToString();
+                    var urlString = uriBuilder.ToString();
+
+
+                    //var senderEmail = _configuration["ReturnPaths:SenderEmail"];
+                    //await _emailSender.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+
+                    // new Implementation
+                    var emailstruct = new MailRequest();
+                    emailstruct.Subject = "Confirm your email address";
+                    emailstruct.Body = $"<a href=\"{urlString}\" style=\"text-decoration: none;\">Verify Email</a>";
+                    emailstruct.ToEmail = userFromDb.Email;
+                    await _mailService.SendEmailAsync(emailstruct);
+
+                    return Ok(new
+                    {
+                        Status = "Fail",
+                        Message = "User Email is Not Varified! Please verify email first"
+                    });
+                }
                 var userRoles = await userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
@@ -71,7 +119,7 @@ namespace StackOverFlow.Controllers
                 appUser.LastSeen = DateTime.Now;
                 _unitOfWork.AppUsers.UpdateUser(appUser.UserId, appUser);
                 _unitOfWork.Complete();
-
+                _unitOfWork.Dispose();
 
                 //var res = new Response { Status = "Success", Message = "User Login Sucessfully!" };
                 return Ok(new
@@ -83,7 +131,7 @@ namespace StackOverFlow.Controllers
                     user = appUser.UserId
                 }) ;
             }
-            return Ok(new Response { Status = "Fail", Message = "Invalid UserName or Password!" });
+            return Ok(new { Status = "Fail", Message = "Invalid UserName or Password!" });
         }
 
         [HttpPost]
@@ -101,25 +149,125 @@ namespace StackOverFlow.Controllers
                 UserName = model.Username
             };
             var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
+            if (result.Succeeded)
             {
+                // For Email Verification
+                var userFromDb = await userManager.FindByNameAsync(user.UserName);
+
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+
+                var uriBuilder = new UriBuilder(_configuration["ReturnPaths:ConfirmEmail"]);
+                var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+                query["token"] = token;
+                query["userid"] = userFromDb.Id;
+                uriBuilder.Query = query.ToString();
+                var urlString = uriBuilder.ToString();
+
+
+                //var senderEmail = _configuration["ReturnPaths:SenderEmail"];
+                //await _emailSender.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+
+                // new Implementation
+                var emailstruct = new MailRequest();
+                emailstruct.Subject = "Confirm your email address";
+                emailstruct.Body = $"<a href=\"{urlString}\" style=\"text-decoration: none;\">Verify Email</a>";
+                emailstruct.ToEmail = userFromDb.Email;
+                await _mailService.SendEmailAsync(emailstruct);
+
+
+
+                // End Email Verification
+                AppUser u = new AppUser()
+                {
+                    FullName = model.FullName,
+                    VisitedDays = 0,
+                    Reputation = 0,
+                    ProfileViews = 0,
+                    ApplicationUserId = user.Id
+                };
+
+                _unitOfWork.AppUsers.Add(u);
+                _unitOfWork.Complete();
+                _unitOfWork.Dispose();
+                return Ok(new Response { Status = "Success", Message = "User created successfully!" });
                 
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
             }
 
-            AppUser u = new AppUser()
+            return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+        }
+
+        [HttpPost]
+        [Route("ResetPasswordToken")]
+        public async Task<IActionResult> GetResetPasswordToken(ForgetPasswordModel model)
+        {
+            //var Appuser = _unitOfWork.AppUsers.GetById(userId);
+            var userFromDb = await userManager.FindByNameAsync(model.UserName);
+            if (User == null)
             {
-                FullName = model.FullName,
-                VisitedDays = 0,
-                Reputation = 0,
-                ProfileViews = 0,
-                ApplicationUserId = user.Id
-            };
+                return BadRequest();
+            }
+            
+            var token = await userManager.GeneratePasswordResetTokenAsync(userFromDb);
 
-            _unitOfWork.AppUsers.Add(u);
-            _unitOfWork.Complete();
+            var uriBuilder = new UriBuilder(_configuration["PwdReturnPaths:ResetPassword"]);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = token;
+            query["userid"] = userFromDb.Id;
+            uriBuilder.Query = query.ToString();
+            var urlString = uriBuilder.ToString();
 
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+
+            //var senderEmail = _configuration["PwdReturnPaths:SenderEmail"];
+            //await _emailSender.SendEmailAsync(senderEmail, userFromDb.Email, "Reset Password", urlString);
+
+
+            // new Implementation
+            var emailstruct = new MailRequest();
+            emailstruct.Subject = "Reset Password";
+            emailstruct.Body = $"<a href=\"{urlString}\" style=\"text-decoration: none;\">Reset Your Password</a>";
+            emailstruct.ToEmail = userFromDb.Email;
+            
+            await _mailService.SendEmailAsync(emailstruct);
+
+
+            return Ok(new Response { Status = "Success", Message = "Please Check your email for reset password." });
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var user = await userManager.FindByNameAsync(model.UserName);
+            
+            if(user == null)
+            {
+                return BadRequest();
+            }
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok(new Response { Status = "Success", Message = "Password Changed Successfully." });
+            }
+            return BadRequest();
+        }
+
+
+
+
+        [HttpPost]
+        [Route("verifyEmail")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.UserId);
+            var result = await userManager.ConfirmEmailAsync(user, model.Token);
+            if (result.Succeeded) {
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -161,6 +309,7 @@ namespace StackOverFlow.Controllers
 
             _unitOfWork.AppUsers.Add(u);
             _unitOfWork.Complete();
+            _unitOfWork.Dispose();
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }

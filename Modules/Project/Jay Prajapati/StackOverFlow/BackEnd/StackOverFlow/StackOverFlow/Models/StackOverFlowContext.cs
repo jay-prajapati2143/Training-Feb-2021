@@ -268,7 +268,8 @@ namespace StackOverFlow.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Questions)
                     .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("Fk_UserIDQuestion");
+                    .HasConstraintName("Fk_UserIDQuestion").OnDelete(DeleteBehavior.NoAction);
+
             });
 
             modelBuilder.Entity<Tag>(entity =>

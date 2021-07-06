@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace StackOverFlow.Controllers
 {
-    [Authorize]
+ 
+    //[Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -39,14 +40,19 @@ namespace StackOverFlow.Controllers
             var user = _unitOfWork.AppUsers.GetById(id);
             return user;
         }
+        
 
         [HttpDelete("{id}")]
-        public ActionResult<AppUser> DeleteUser(int id)
+        public async Task<ActionResult<AppUser>> DeleteUser(int id)
         {
-            var user = _unitOfWork.AppUsers.GetById(id);
-            _unitOfWork.AppUsers.Remove(user);
+            
+            var appUser = _unitOfWork.AppUsers.GetById(id);
+            var user = await userManager.FindByIdAsync(appUser.ApplicationUserId);
+           
+            _unitOfWork.AppUsers.Remove(appUser);
             _unitOfWork.Complete();
-            return user;
+            _unitOfWork.Dispose();
+            return Ok();
         }
     }
 }

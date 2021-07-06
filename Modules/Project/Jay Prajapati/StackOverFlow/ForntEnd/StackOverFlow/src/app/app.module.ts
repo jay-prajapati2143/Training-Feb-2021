@@ -16,6 +16,9 @@ import { AskQuestionComponent } from './ask-question/ask-question.component';
 import { AuthGuard } from './auth.guard';
 import {TokenInterceptorService} from './token-interceptor.service';
 import { AuthenticationService } from './authentication.service';
+import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -26,6 +29,9 @@ import { AuthenticationService } from './authentication.service';
     PageNotFoundComponent,
     QuesionAnswerDetailComponent,
     AskQuestionComponent,
+    ConfirmEmailComponent,
+    ForgetPasswordComponent,
+    ResetPasswordComponent,
     
     
   ],

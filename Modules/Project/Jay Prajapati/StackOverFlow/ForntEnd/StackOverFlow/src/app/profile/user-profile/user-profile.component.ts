@@ -10,7 +10,10 @@ import { UsersService } from 'src/app/users.service';
 })
 export class UserProfileComponent implements OnInit {
   currentUserId : any;
-  user : any;
+  user : any = { 
+    reputation : 0,
+    answers:[],
+    questions:[]}
   constructor(private userService : UsersService,private route : Router) { }
 
   ngOnInit(): void {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -15,12 +16,17 @@ namespace StackOverFlow.Models
         }
 
         public int QuestionId { get; set; }
-        public int? UserId { get; set; }
+        [Required]
+        public int UserId { get; set; }
+        [Required]
         public string Question1 { get; set; }
         public string QuestionBody { get; set; } // new column Added
-        public int? TotalViews { get; set; }
-        public int? Vote { get; set; }
-        public DateTime? TimeOfAsk { get; set; }
+        [Required]
+        public int TotalViews { get; set; }
+        [Required]
+        public int Vote { get; set; }
+        [Required]
+        public DateTime TimeOfAsk { get; set; }
 
         public virtual AppUser User { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }

@@ -11,8 +11,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class QuestionsComponent implements OnInit {
 
-  serachedQuestions : any;
-  allQuestions : any;
+  serachedQuestions : any = [];
+  allQuestions : any = [];
   constructor(private fb : FormBuilder,
     private questions: QuestionsService,private route: Router) { }
 
@@ -24,8 +24,8 @@ export class QuestionsComponent implements OnInit {
     this.questions.getAllQuestions().subscribe(
       res=>{
         this.allQuestions = res;
-        console.log(res);
-        console.log(this.allQuestions)
+        //console.log(res);
+        //console.log(this.allQuestions)
       },
       err=>console.log(err)
     )
@@ -45,7 +45,7 @@ export class QuestionsComponent implements OnInit {
           }
           else{
             this.allQuestions = res; 
-          console.log(res)
+          //console.log(res)
           }
           
         }
@@ -55,8 +55,8 @@ export class QuestionsComponent implements OnInit {
       this.questions.getAllQuestions().subscribe(
         res=>{
           this.allQuestions = res;
-          console.log(res);
-          console.log(this.allQuestions)
+          //console.log(res);
+          //console.log(this.allQuestions)
         },
         err=>console.log(err)
       )

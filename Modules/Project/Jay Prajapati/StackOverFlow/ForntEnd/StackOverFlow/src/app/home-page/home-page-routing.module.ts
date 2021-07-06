@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { QuesionAnswerDetailComponent } from '../quesion-answer-detail/quesion-answer-detail.component';
 import { HomePageComponent } from './home-page.component';
 
@@ -13,6 +14,7 @@ children : [
   { path: 'profile', loadChildren: () => import('../profile/profile.module').then(m => m.ProfileModule) },
   { path: 'home', loadChildren: () => import('../top-questions/top-questions.module').then(m => m.TopQuestionsModule) },
   { path: 'users/:userId', loadChildren: () => import('../user-details/user-details.module').then(m => m.UserDetailsModule) },
+  
 ]}];
 
 @NgModule({

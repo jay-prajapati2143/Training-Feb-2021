@@ -18,6 +18,14 @@ export class AuthenticationService {
   registerUser(user : any){
     return this.http.post<any>(`${this._baseUrl}/authenticate/register`,user);
   }
+
+  confirmEmail(model: any){
+    
+    return this.http.post(`${this._baseUrl}/authenticate/verifyEmail`,model);
+  }
+  
+
+
   loginUser(user : any){
     return this.http.post(`${this._baseUrl}/authenticate/login`, user);
   }
@@ -33,5 +41,13 @@ export class AuthenticationService {
 
   getToken(){
     return localStorage.getItem('token');
+  }
+
+  resetPasswordToken(form : any){
+   return this.http.post(`${this._baseUrl}/authenticate/ResetPasswordToken`,form);
+  }
+
+  resetPassword(resetForm : any){
+    return this.http.post(`${this._baseUrl}/authenticate/ResetPassword`,resetForm);
   }
 }

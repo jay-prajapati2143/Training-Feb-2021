@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackOverFlow.Code.Services;
+using StackOverFlow.Code.Services.Email;
+using StackOverFlow.Code.Services.Email.Settings;
 using StackOverFlow.Models;
 using StackOverFlow.Models.Authentication;
 using StackOverFlow.Repositories;
@@ -39,6 +42,7 @@ namespace StackOverFlow
             
             services.AddControllers();
 
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             // Repository Register
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -64,6 +68,8 @@ namespace StackOverFlow
             services.AddTransient<IWhereUserLikeToWorkRepository, WhereUserLikeToWorkRepository>();
             services.AddTransient<IVoteRepository, VoteRepository>();
 
+            services.AddTransient<IMailService, MailService>();
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             // For Entity Framework  
@@ -71,9 +77,17 @@ namespace StackOverFlow
             
 
             // For Identity  
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<StackOverFlowContext>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true; 
+            }).AddEntityFrameworkStores<StackOverFlowContext>()
                 .AddDefaultTokenProviders();
+
+            //for smtp mailSettting 
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+
+            //Set Lifespan for token
+            services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromHours(2));
 
             // Adding Authentication  
             services.AddAuthentication(options =>
@@ -98,7 +112,7 @@ namespace StackOverFlow
                 };
             });
 
-
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "StackOverFlow", Version = "v1" });

@@ -15,10 +15,14 @@ export class TopQuestionsComponent implements OnInit {
   ngOnInit(): void {
 
     this.questions.getTopQuestions().subscribe(
-      res=>{this.topQuestions = res;console.log(res);console.log(this.topQuestions)},
+      res=>{
+        this.topQuestions = res;
+        //console.log(res);
+        //console.log(this.topQuestions)
+      },
       err=>console.log(err)
     )
-    console.log(this.topQuestions);
+    //console.log(this.topQuestions);
   }
 
   

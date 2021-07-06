@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit {
     this.userService.getAllUsers()
         .subscribe(
           res=>{
-            console.log(res);
+            //console.log(res);
             this.users = res;
           })
   }
@@ -32,7 +32,7 @@ export class UsersComponent implements OnInit {
     if(user != ''){
       this.userService.searchUser(user).subscribe(
         res=>{
-          console.log(res);
+          //console.log(res);
           this.users = res;
         }
       )
@@ -40,7 +40,7 @@ export class UsersComponent implements OnInit {
       this.userService.getAllUsers()
         .subscribe(
           res=>{
-            console.log(res);
+            //console.log(res);
             this.users = res;
           })
     }

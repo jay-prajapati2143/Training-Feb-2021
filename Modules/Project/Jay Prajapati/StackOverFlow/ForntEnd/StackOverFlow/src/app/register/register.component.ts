@@ -10,6 +10,11 @@ import {PasswordStrengthValidator} from '../Validation/password-strength.validat
 })
 export class RegisterComponent implements OnInit {
 
+  
+  hide1 : boolean = true;
+  hide2 : boolean = true;
+  hide3 : boolean = true;
+
   constructor(private fb : FormBuilder,private _auth : AuthenticationService, private route : Router) { }
 
   registrationForm = this.fb.group({
@@ -55,5 +60,15 @@ export class RegisterComponent implements OnInit {
   loginUser(){
     this.route.navigate(['login']);
         
+  }
+
+
+  CurrentPasswordToggle(){
+    if(this.hide1){
+      this.hide1 = false;
+    }else
+    {
+      this.hide1 = true;
+    }
   }
 }

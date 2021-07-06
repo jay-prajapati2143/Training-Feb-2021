@@ -32,6 +32,7 @@ export class UsersService {
   }
 
   putUser(userId : number,user : any){
+    debugger;
     return this.http.put(`${this.baseUrl}/User/${userId}`, user);
   }
 
@@ -85,6 +86,11 @@ export class UsersService {
   // Bookmarked Questions
   getBookmarked(userId : number){
     return this.http.get(`${this.baseUrl}/User/bookmarked/${userId}`);
+  }
+
+  //Change Password
+  changePassword(form : any){
+    return this.http.post(`${this.baseUrl}/User/changePassword`,form);
   }
 
 }

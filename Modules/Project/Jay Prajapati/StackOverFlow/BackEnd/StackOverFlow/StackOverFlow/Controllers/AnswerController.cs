@@ -46,7 +46,7 @@ namespace StackOverFlow.Controllers
         public ActionResult<Answer> PostAnswer(int userid,int queId, Answer ans)
         {
             var user = userManager.Users.First(x => x.UserName == User.Identity.Name);
-            
+            var appUser = _unitOfWork.AppUsers.Find(u => u.ApplicationUserId == user.Id).FirstOrDefault();
             if (!_unitOfWork.AppUsers.ValidateUser(user.Id, userid))
             {
                 return Unauthorized();
@@ -59,8 +59,13 @@ namespace StackOverFlow.Controllers
             ans.QuestionId = queId;
             ans.Vote = 0;
             _unitOfWork.Answer.Add(ans);
+
+            appUser.Reputation += 1;
+            _unitOfWork.AppUsers.UpdateUser(appUser.UserId, appUser);
+
             _unitOfWork.Complete();
-            return ans;
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "Answer Successfully uploaded" });
         }
 
 
@@ -84,7 +89,8 @@ namespace StackOverFlow.Controllers
             answer.Answer1 = ans.Answer1;
             _unitOfWork.Answer.UpdateAnswer(ansId, answer);
             _unitOfWork.Complete();
-            return Ok();
+            _unitOfWork.Dispose();
+            return Ok(new Response { Status = "Success", Message = "Answer Successfully Updated"});
 
         }
 
@@ -136,7 +142,8 @@ namespace StackOverFlow.Controllers
                 _unitOfWork.AppUsers.UpdateUser(appUser.UserId, appUser);
 
                 _unitOfWork.Complete();
-                return Ok(ans);
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "UpVote Answer Successfully done" });
             
 
         }
@@ -181,7 +188,8 @@ namespace StackOverFlow.Controllers
             vote.timeOfVote = DateTime.Now;
             _unitOfWork.Vote.Add(vote);
             _unitOfWork.Complete();
-            return Ok(ans);
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "DownVote Answer Successfully done" });
 
         }
 

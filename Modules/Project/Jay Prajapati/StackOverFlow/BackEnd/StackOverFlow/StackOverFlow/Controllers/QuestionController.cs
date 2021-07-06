@@ -40,6 +40,7 @@ namespace StackOverFlow.Controllers
             Que.TotalViews += 1;
             _unitOfWork.Question.UpdateQuestion(queId, Que);
             _unitOfWork.Complete();
+            _unitOfWork.Dispose();
             return Que;
         }
 
@@ -49,6 +50,7 @@ namespace StackOverFlow.Controllers
         public ActionResult<Question> PostQuestion(int userid, Question Que)
         {
             var user = userManager.Users.First(x => x.UserName == User.Identity.Name);
+            var appUser = _unitOfWork.AppUsers.Find(u => u.ApplicationUserId == user.Id).FirstOrDefault();
             if (!_unitOfWork.AppUsers.ValidateUser(user.Id, userid))
             {
                 return Unauthorized();
@@ -57,9 +59,14 @@ namespace StackOverFlow.Controllers
             Que.Vote = 0;
             Que.TotalViews = 0;
             Que.TimeOfAsk = DateTime.Now;
+
             _unitOfWork.Question.Add(Que);
+
+            appUser.Reputation += 1;
+            _unitOfWork.AppUsers.UpdateUser(appUser.UserId,appUser);
             _unitOfWork.Complete();
-            return Que;
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "Question Successfully Uploaded" });
         }
 
 
@@ -81,7 +88,8 @@ namespace StackOverFlow.Controllers
 
             _unitOfWork.Question.UpdateQuestion(queId, que);
             _unitOfWork.Complete();
-            return Ok();
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "Question Successfully Updated" });
 
         }
 
@@ -128,7 +136,8 @@ namespace StackOverFlow.Controllers
             appUser.Reputation += 1;
             _unitOfWork.AppUsers.UpdateUser(appUser.UserId, appUser);
             _unitOfWork.Complete();
-            return Ok(que);
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "UpVote Question Successfully done" });
         }
 
         [HttpGet]
@@ -167,7 +176,8 @@ namespace StackOverFlow.Controllers
             vote.timeOfVote = DateTime.Now;
             _unitOfWork.Vote.Add(vote);
             _unitOfWork.Complete();
-            return Ok(que);
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "DownVote Question Successfully done" });
         }
 
 
@@ -199,7 +209,8 @@ namespace StackOverFlow.Controllers
             }
             _unitOfWork.Bookmark.Add(bookmark);
             _unitOfWork.Complete();
-            return Ok(bookmark);
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "Bookmarked successfully done" });
 
         }
 

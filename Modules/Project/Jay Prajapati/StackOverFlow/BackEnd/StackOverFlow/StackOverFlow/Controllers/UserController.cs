@@ -29,11 +29,10 @@ namespace StackOverFlow.Controllers
         {
             this._unitOfWork = unitOfWork;
             this.userManager = userManager;
-            
         }
 
 
-        
+
         //[HttpGet] 
         //public IActionResult GetCurrentUserId() 
         //{
@@ -42,7 +41,8 @@ namespace StackOverFlow.Controllers
         //    return Ok(user); 
         //}
 
-        
+
+
 
 
         //GET: api/<UserController>
@@ -82,7 +82,7 @@ namespace StackOverFlow.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public ActionResult<AppUser> PostUser(int id, AppUser user)
+        public ActionResult<UserUpdateModel> PostUser(int id, UserUpdateModel user)
         {
             var u = userManager.Users.AsNoTracking().First(x => x.UserName == User.Identity.Name);
             if (!_unitOfWork.AppUsers.ValidateUser(u.Id, id))
@@ -98,8 +98,22 @@ namespace StackOverFlow.Controllers
             appUser.AboutUser = user.AboutUser;
             _unitOfWork.AppUsers.UpdateUser(id, appUser);
             _unitOfWork.Complete();
-            return user;
+            _unitOfWork.Dispose();
+            return Ok(new Response() { Status = "Success", Message = "User Successfully Updated" });
         }
+
+
+
+        [HttpPost]
+        [Route("changePassword")]
+        public async Task<IdentityResult> ChangePassword(ChangePasswordModel model)
+        {
+            var user = userManager.Users.First(x => x.UserName == User.Identity.Name);
+            return await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            //return Ok();
+        }
+
+
 
         // bookmarkedQuestions
         [HttpGet]
